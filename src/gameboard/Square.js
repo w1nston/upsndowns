@@ -21,8 +21,8 @@ const squareStyle = css`
   }
 `;
 
-const Square = ({ number }) => (
-  <div className={squareStyle}>
+const Square = ({ column, row, number }) => (
+  <div data-row={row} data-column={column} className={squareStyle}>
     <p>{number}</p>
   </div>
 );

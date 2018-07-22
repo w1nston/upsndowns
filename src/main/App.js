@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from 'emotion';
+import SelectPlayers from '../player/SelectPlayers';
 import Gameboard from '../gameboard/Gameboard';
 
 const containerStyle = css`
@@ -14,7 +15,6 @@ const titleStyle = css`
   margin: 4.375rem 1rem;
 
   @media (min-width: 992px) {
-    font-size: 2rem;
     margin: 4.375rem 0;
   }
 `;
@@ -22,6 +22,7 @@ const titleStyle = css`
 const App = () => (
   <section className={containerStyle}>
     <h1 className={titleStyle}>Snakes and ladders...</h1>
+    <SelectPlayers />
     <Gameboard rows={10} columns={10} />
   </section>
 );

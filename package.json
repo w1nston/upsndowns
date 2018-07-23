@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reach/router": "^1.1.1",
     "emotion": "^9.2.6",
     "invariant": "^2.2.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
     "uuidv4": "^1.0.1"
   },
   "devDependencies": {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { css } from 'emotion';
-import SelectPlayers from '../player/SelectPlayers';
-import Gameboard from '../gameboard/Gameboard';
+import { Router } from '@reach/router';
+import GameFormContainer from '../player/GameFormContainer';
+import GameboardContainer from '../gameboard/GameboardContainer';
 
 const containerStyle = css`
   @media (min-width: 992px) {
@@ -19,11 +20,16 @@ const titleStyle = css`
   }
 `;
 
+// TODO: with state to props...
+// <Gameboard rows={10} columns={10} />
+
 const App = () => (
   <section className={containerStyle}>
     <h1 className={titleStyle}>Snakes and ladders...</h1>
-    <SelectPlayers />
-    <Gameboard rows={10} columns={10} />
+    <Router>
+      <GameFormContainer path="/" />
+      <GameboardContainer path="/game" />
+    </Router>
   </section>
 );
 

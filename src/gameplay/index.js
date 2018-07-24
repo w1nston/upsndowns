@@ -1,4 +1,3 @@
-
 const initialState = {
   players: [],
 };
@@ -16,6 +15,21 @@ const initPlayers = numberOfPlayers => {
   }
   return players;
 };
+
+const rollDice = (state, playerNumber) =>
+  state.players.map(player => {
+    if (player.number === playerNumber) {
+      // TODO: This is where we want's matrix multiplication?
+      return {
+        ...player,
+        position: {
+          row: player.position.row,
+          column: player.position.column + 1,
+        },
+      };
+    }
+    return player;
+  });
 
 const ROLL_DICE = 'ROLL_DICE';
 const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
@@ -35,7 +49,7 @@ export const gameState = (state = initialState, action) => {
     case ROLL_DICE: {
       return {
         ...state,
-        players: ROLL_DICE(state, action.player),
+        players: rollDice(state, action.playerNumber),
       };
     }
     case SET_NUMBER_OF_PLAYERS: {

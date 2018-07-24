@@ -4,8 +4,7 @@ import { Redirect } from '@reach/router';
 import { createBoard } from './gameboardUtil';
 import Gameboard from './Gameboard';
 import { rollDiceAction } from '../gameplay';
-
-const isNotEmpty = x => x && x.length > 0;
+import { isNotEmpty } from '../common/util';
 
 const GameobardContainer = ({ dispatchRollDice, players }) => {
   if (players.length < 1) {

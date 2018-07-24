@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from 'emotion';
+import { isNotEmpty } from '../common/util';
 
 const squareStyle = css`
   align-items: center;
@@ -24,9 +25,6 @@ const squareStyle = css`
 const playersStyle = css`
   font-size: 1rem;
 `;
-
-// TODO: make common util
-const isNotEmpty = x => x && x.length > 0;
 
 const Square = ({ number, players }) => (
   <div className={squareStyle}>

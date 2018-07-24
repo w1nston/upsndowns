@@ -8,7 +8,7 @@ const tableStyle = css`
   border-collapse: collapse;
 `;
 
-const Gameboard = ({ rows, columns }) => {
+const Gameboard = ({ columns, rows }) => {
   const board = createBoard(rows, columns);
   return (
     <table className={tableStyle}>

@@ -7,7 +7,7 @@ const initialState = {
   players: [],
 };
 
-const initPlayers = (numberOfPlayers, numberOfRows)  => {
+const initPlayers = (numberOfPlayers, numberOfRows) => {
   const players = [];
   for (let i = 0; i < numberOfPlayers; ++i) {
     players.push({
@@ -15,17 +15,42 @@ const initPlayers = (numberOfPlayers, numberOfRows)  => {
       position: {
         column: 0,
         row: numberOfRows - 1,
-      }
-    })
+      },
+    });
   }
   return players;
 };
 
-export const INIT_PLAYERS = 'INIT_PLAYERS';
-export const ROLL_DICE = 'ROLL_DICE';
-export const SET_NUMBER_OF_COLUMNS = 'SET_NUMBER_OF_COLUMNS';
-export const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
-export const SET_NUMBER_OF_ROWS = 'SET_NUMBER_OF_ROWS';
+const INIT_PLAYERS = 'INIT_PLAYERS';
+const ROLL_DICE = 'ROLL_DICE';
+const SET_NUMBER_OF_COLUMNS = 'SET_NUMBER_OF_COLUMNS';
+const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
+const SET_NUMBER_OF_ROWS = 'SET_NUMBER_OF_ROWS';
+
+export const initPlayersAction = numberOfPlayers => ({
+  type: INIT_PLAYERS,
+  numberOfPlayers,
+});
+
+export const rollDiceAction = playerNumber => ({
+  type: ROLL_DICE,
+  playerNumber,
+});
+
+export const setNumberOfColumnsAction = numberOfColumns => ({
+  type: SET_NUMBER_OF_COLUMNS,
+  numberOfColumns,
+});
+
+export const setNumberOfPlayersAction = numberOfPlayers => ({
+  type: SET_NUMBER_OF_PLAYERS,
+  numberOfPlayers,
+});
+
+export const setNumberOfRowsAction = numberOfRows => ({
+  type: SET_NUMBER_OF_ROWS,
+  numberOfRows,
+});
 
 export const gameState = (state = initialState, action) => {
   switch (action.type) {
@@ -38,6 +63,12 @@ export const gameState = (state = initialState, action) => {
       return {
         ...state,
         players: initPlayers(state.numberOfPlayers, state.numberOfRows),
+      };
+    }
+    case ROLL_DICE: {
+      return {
+        ...state,
+        players: ROLL_DICE(state, action.player),
       };
     }
     case SET_NUMBER_OF_COLUMNS: {

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from '@reach/router';
 import {
-  SET_NUMBER_OF_COLUMNS,
-  SET_NUMBER_OF_PLAYERS,
-  SET_NUMBER_OF_ROWS,
+  setNumberOfColumnsAction,
+  setNumberOfPlayersAction,
+  setNumberOfRowsAction,
 } from '../gameplay';
 import GameForm from './GameForm';
 
@@ -120,13 +120,13 @@ class GameFormContainer extends Component {
 
 const mapDispatchToProps = dispatch => ({
   dispatchNumberOfColumns: numberOfColumns => {
-    dispatch({ type: SET_NUMBER_OF_COLUMNS, numberOfColumns });
+    dispatch(setNumberOfColumnsAction(numberOfColumns));
   },
   dispatchNumberOfPlayers: numberOfPlayers => {
-    dispatch({ type: SET_NUMBER_OF_PLAYERS, numberOfPlayers });
+    dispatch(setNumberOfPlayersAction(numberOfPlayers));
   },
   dispatchNumberOfRows: numberOfRows => {
-    dispatch({ type: SET_NUMBER_OF_ROWS, numberOfRows });
+    dispatch(setNumberOfRowsAction(numberOfRows));
   },
 });
 

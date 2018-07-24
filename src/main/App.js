@@ -20,9 +20,6 @@ const titleStyle = css`
   }
 `;
 
-// TODO: with state to props...
-// <Gameboard rows={10} columns={10} />
-
 const App = () => (
   <section className={containerStyle}>
     <h1 className={titleStyle}>Snakes and ladders...</h1>

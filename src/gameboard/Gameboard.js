@@ -1,24 +1,22 @@
 import React from 'react';
 import { css } from 'emotion';
 import uuid from 'uuidv4';
-import { createBoard } from './gameboardUtil';
 import Square from './Square';
 
 const tableStyle = css`
   border-collapse: collapse;
 `;
 
-const Gameboard = ({ columns, rows }) => {
-  const board = createBoard(rows, columns);
+const Gameboard = ({ gameboard }) => {
   return (
     <table className={tableStyle}>
       <thead />
       <tbody>
-        {board.map((row, rowIndex) => (
+        {gameboard.map(row => (
           <tr key={uuid()}>
-            {row.map((square, columnIndex) => (
+            {row.map(square => (
               <td key={uuid()}>
-                <Square row={rowIndex} column={columnIndex} number={square} />
+                <Square players={square.players} number={square.number} />
               </td>
             ))}
           </tr>

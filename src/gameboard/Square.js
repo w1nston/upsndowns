@@ -5,11 +5,11 @@ const squareStyle = css`
   align-items: center;
   border: 0.0625rem solid #333;
   display: flex;
+  flex-direction: column;
   font-size: 1.8rem;
   font-weight: 700;
   height: 7.5rem;
   justify-content: center;
-  padding: 1rem;
   text-align: center;
   width: 7.5rem /*3.875rem == 62px*/;
 
@@ -21,9 +21,22 @@ const squareStyle = css`
   }
 `;
 
-const Square = ({ column, row, number }) => (
-  <div data-row={row} data-column={column} className={squareStyle}>
+const playersStyle = css`
+  font-size: 1rem;
+`;
+
+// TODO: make common util
+const isNotEmpty = x => x && x.length > 0;
+
+const Square = ({ number, players }) => (
+  <div className={squareStyle}>
     <p>{number}</p>
+    {isNotEmpty(players) ? (
+      <p className={playersStyle}>
+        <span>Players:</span>
+        <span>{players.join(', ')}</span>
+      </p>
+    ) : null}
   </div>
 );
 

@@ -1,39 +1,44 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from '@reach/router';
+import { createBoard } from './gameboardUtil';
 import Gameboard from './Gameboard';
-import {
-  initPlayersAction,
-  rollDiceAction,
-} from '../gameplay';
+import { rollDiceAction } from '../gameplay';
 
-const GameobardContainer = ({
-  columns,
-  dispatchInitPlayers,
-  dispatchRollDice,
-  players,
-  rows,
-}) => {
-  if (columns && rows) {
-    dispatchInitPlayers();
-    return (
-      <Gameboard
-        dispatchRollDice={dispatchRollDice}
-        columns={columns}
-        rows={rows}
-      />
-    );
+const isNotEmpty = x => x && x.length > 0;
+
+const GameobardContainer = ({ dispatchRollDice, players }) => {
+  if (players.length < 1) {
+    return <Redirect noThrow from="/game" to="/" />;
   }
-  return <Redirect noThrow from="/game" to="/" />;
+
+  const board = createBoard(10, 10);
+
+  const gameboard = board.map((rowElement, rowIndex) =>
+    rowElement.map((columnElement, columnIndex) => ({
+      number: board[rowIndex][columnIndex],
+    }))
+  );
+
+  players.forEach(player => {
+    const square = gameboard[player.position.row][player.position.column];
+    gameboard[player.position.row][player.position.column] = {
+      ...square,
+      players: isNotEmpty(square.players)
+        ? square.players.concat([player.number])
+        : [player.number],
+    };
+  });
+
+  // TODO: Somewhere rollDice is needed...
+  return <Gameboard gameboard={gameboard} />;
 };
 
-const mapStateToProps = ({ numberOfColumns, numberOfRows }) => ({
-  columns: numberOfColumns,
-  rows: numberOfRows,
+const mapStateToProps = ({ players }) => ({
+  players,
 });
 
 const mapDispatchToProps = dispatch => ({
-  dispatchInitPlayers: () => dispatch(initPlayersAction()),
   dispatchRollDice: playerNumber => dispatch(rollDiceAction(playerNumber)),
 });
 

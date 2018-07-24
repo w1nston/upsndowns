@@ -33,18 +33,10 @@ const GameForm = ({
   disabled,
   onSubmit,
   message, // TODO: one for each?
-  numberOfColumns,
   numberOfPlayers,
-  numberOfRows,
-  onColumnsChange,
-  onColumnsDecrease,
-  onColumnsIncrease,
   onPlayersChange,
   onPlayersDecrease,
   onPlayersIncrease,
-  onRowsChange,
-  onRowsDecrease,
-  onRowsIncrease,
 }) => (
   <form onSubmit={onSubmit}>
     {message && <p>{message}</p>}
@@ -56,24 +48,6 @@ const GameForm = ({
       onIncrease={onPlayersIncrease}
       value={numberOfPlayers}
       name="players"
-    />
-    <label htmlFor="gameboardRows">Select number of rows for gameboard:</label>
-    <CounterInput
-      disabled={disabled}
-      onChange={onRowsChange}
-      onDecrease={onRowsDecrease}
-      onIncrease={onRowsIncrease}
-      value={numberOfRows}
-      name="gameboardRows"
-    />
-    <label htmlFor="gameboardColumns">Select number of columns for gameboard:</label>
-    <CounterInput
-      disabled={disabled}
-      onChange={onColumnsChange}
-      onDecrease={onColumnsDecrease}
-      onIncrease={onColumnsIncrease}
-      value={numberOfColumns}
-      name="gameboardColumns"
     />
 
     <button type="submit" className={submitButtonStyle} disabled={disabled}>

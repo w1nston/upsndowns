@@ -34,16 +34,17 @@ const diceButtonStyle = css`
   }
 `;
 
-const GameobardContainer = ({ dispatchRollDice, players }) => {
+const whosTurnStyle = css`
+  margin-right: .5rem;
+`;
+
+const GameobardContainer = ({ dispatchRollDice, players, playerTurn }) => {
   if (players.length < 1) {
     return <Redirect noThrow from="/game" to="/" />;
   }
 
   function handleRollDice(event) {
-    dispatchRollDice(1);
-    setTimeout(() => {
-      dispatchRollDice(2);
-    }, 1500);
+    dispatchRollDice();
   }
 
   const board = createBoard(10, 10);
@@ -64,10 +65,11 @@ const GameobardContainer = ({ dispatchRollDice, players }) => {
     };
   });
 
-  // TODO: Somewhere rollDice is needed...
   return (
     <Fragment>
       <Gameboard gameboard={gameboard} />
+      <strong className={whosTurnStyle}>Who's turn:</strong>
+      <span>Player {playerTurn}</span>
       <button
         type="button"
         onClick={handleRollDice}
@@ -79,8 +81,9 @@ const GameobardContainer = ({ dispatchRollDice, players }) => {
   );
 };
 
-const mapStateToProps = ({ players }) => ({
+const mapStateToProps = ({ players, playerTurn }) => ({
   players,
+  playerTurn,
 });
 
 const mapDispatchToProps = dispatch => ({

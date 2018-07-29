@@ -71,24 +71,23 @@ const initPlayers = numberOfPlayers => {
   return players;
 };
 
+// TODO: http://mathjs.org/examples/browser/webworkers/index.html
 const rollDice = state =>
   state.players.map(player => {
     if (player.number === state.playerTurn) {
 
-      // TODO: Will this be useful at all?
-      const movePrediction = math.multiply(player.positionVector, state.transitionMatrix);
-      console.log(movePrediction);
+      // create the prediction array
+      const movePrediction = math.multiply(
+        player.positionVector,
+        state.transitionMatrix
+      );
 
-      // [1, 0, 0, ..., 0]
-      //                  *
-      // [0, 0.16666, 0.16666, 0.16666, 0.16666, 0.16666, 0.16666, 0, 0, ..., 0]
-      //
-      // [0, 1, 0, 0, 0, ..., 0] OR
-      // [0, 0, 1, 0, 0, ..., 0] OR
-      // [0, 0, 0, 1, 0, ..., 0] OR
-      // [0, 0, 0, 0, 1, ..., 0] OR
-      // [0, 0, 0, 0, 0, 1, ..., 0] OR
-      // [0, 0, 0, 0, 0, 0, 1, ..., 0] OR
+      // compress the array...
+      const predictionVector = movePrediction.valueOf()
+        .map((x, index) => ({ index, probability: x }))
+        .filter(x => x.probability > 0);
+
+      console.log(predictionVector);
 
       return {
         ...player,

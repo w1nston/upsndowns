@@ -1,6 +1,4 @@
 import math from 'mathjs';
-import invariant from 'invariant';
-import { isNotEmpty } from '../common/util';
 
 const initTransitionMatrix = () => {
   const predictionMatrix = [];
@@ -102,13 +100,32 @@ const getNextPositionVector = nextPosition => {
   return positionVector;
 };
 
+const getNextPosition = nextPosition => {
+  const a = {
+    column: nextPosition % 10,
+    row: Math.floor(nextPosition / 10), 
+    // TODO:
+    //  0 -> 9  > +9
+    //  1 -> 8, > +7
+    //  2 -> 7, > +5
+    //  3 -> 6, > +3
+    //  4 -> 5, > +1
+    // >------------<
+    //  5 -> 4, > -1
+    //  6 -> 3, > -3
+    //  7 -> 2, > -5
+    //  8 -> 1, > -7
+    //  9 -> 0, > -9
+  };
+  console.log('row:', a.row);
+  console.log('column:', a.column);
+  return a;
+};
+
 // TODO: http://mathjs.org/examples/browser/webworkers/index.html
 const rollDice = state =>
   state.players.map(player => {
     if (player.number === state.playerTurn) {
-      console.log(player.positionVector);
-
-      // TODO: better name...
       const movePrediction = math.multiply(
         player.positionVector,
         state.transitionMatrix
@@ -122,15 +139,12 @@ const rollDice = state =>
 
       const nextPosition = getRandomNextPosition(predictionVector);
 
-      console.log('next position:', nextPosition);
+      console.log(nextPosition);
 
       return {
         ...player,
         positionVector: getNextPositionVector(nextPosition),
-        // position: {
-        // row: player.position.row,
-        // column: player.position.column + 1,
-        // },
+        position: getNextPosition(nextPosition),
       };
     }
     return player;

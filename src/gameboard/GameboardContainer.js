@@ -38,6 +38,7 @@ const whosTurnStyle = css`
   margin-right: .5rem;
 `;
 
+
 const GameobardContainer = ({ dispatchRollDice, players, playerTurn }) => {
   if (players.length < 1) {
     return <Redirect noThrow from="/game" to="/" />;

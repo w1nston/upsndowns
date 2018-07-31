@@ -1,6 +1,6 @@
 import invariant from 'invariant';
+import { isEven } from '../common/util';
 
-const isEven = x => x % 2 === 0;
 
 export const createBoard = (rows, columns) => {
   invariant(rows > 0, 'A gameboard needs more than zero rows!');

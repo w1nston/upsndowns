@@ -1,5 +1,7 @@
 import math from 'mathjs';
+import { isEven } from '../common/util';
 
+// TODO: make sure this is correct, also ensure we get absorbing state for last square.
 const initTransitionMatrix = () => {
   const predictionMatrix = [];
 
@@ -101,25 +103,17 @@ const getNextPositionVector = nextPosition => {
 };
 
 const getNextPosition = nextPosition => {
-  const a = {
-    column: nextPosition % 10,
-    row: Math.floor(nextPosition / 10), 
-    // TODO:
-    //  0 -> 9  > +9
-    //  1 -> 8, > +7
-    //  2 -> 7, > +5
-    //  3 -> 6, > +3
-    //  4 -> 5, > +1
-    // >------------<
-    //  5 -> 4, > -1
-    //  6 -> 3, > -3
-    //  7 -> 2, > -5
-    //  8 -> 1, > -7
-    //  9 -> 0, > -9
+  let column = nextPosition % 10;
+  const row = 9 - Math.floor(nextPosition / 10);
+
+  if (isEven(row)) {
+    column = 9 - column;
+  }
+
+  return {
+    column,
+    row,
   };
-  console.log('row:', a.row);
-  console.log('column:', a.column);
-  return a;
 };
 
 // TODO: http://mathjs.org/examples/browser/webworkers/index.html
@@ -131,15 +125,12 @@ const rollDice = state =>
         state.transitionMatrix
       );
 
-      // compress the array...
       const predictionVector = movePrediction
         .valueOf()
         .map((x, index) => ({ index, probability: x }))
         .filter(x => x.probability > 0);
 
       const nextPosition = getRandomNextPosition(predictionVector);
-
-      console.log(nextPosition);
 
       return {
         ...player,

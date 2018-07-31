@@ -15,12 +15,11 @@ const diceButtonStyle = css`
   color: #ecf0f1;
   display: block;
   height: 4.75rem;
-  margin: 1.875rem auto;
   overflow: hidden;
   outline: none;
   padding: 0;
   transition: background-color 0.3s;
-  width: 4.75rem;
+  width: 100%;
 
   &:hover,
   :focus {
@@ -34,7 +33,7 @@ const diceButtonStyle = css`
   }
 `;
 
-const whosTurnStyle = css`
+const playersInformationStrongStyle = css`
   margin-right: 0.5rem;
 `;
 
@@ -42,7 +41,17 @@ const playersInformationContainerStyle = css`
   margin: 1rem;
 `;
 
-const GameobardContainer = ({ dispatchRollDice, players, playerTurn }) => {
+const controlContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const GameobardContainer = ({
+  currentPlayer,
+  dispatchRollDice,
+  players,
+  previousPlayer,
+}) => {
   if (players.length < 1) {
     return <Redirect noThrow from="/game" to="/" />;
   }
@@ -72,24 +81,33 @@ const GameobardContainer = ({ dispatchRollDice, players, playerTurn }) => {
   return (
     <Fragment>
       <Gameboard gameboard={gameboard} />
-      <div className={playersInformationContainerStyle}>
-        <strong className={whosTurnStyle}>Who's turn:</strong>
-        <span>Player {playerTurn}</span>
+      <div className={controlContainerStyle}>
+        <div className={playersInformationContainerStyle}>
+          <strong className={playersInformationStrongStyle}>Who's turn:</strong>
+          <span>Player {currentPlayer}</span>
+        </div>
+        {previousPlayer && (
+          <div className={playersInformationContainerStyle}>
+            <strong className={playersInformationStrongStyle}>Player {previousPlayer} rolled:</strong>
+            <span>{players[previousPlayer - 1].rolled}</span>
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={handleRollDice}
+          className={diceButtonStyle}
+        >
+          Roll the dice!
+        </button>
       </div>
-      <button
-        type="button"
-        onClick={handleRollDice}
-        className={diceButtonStyle}
-      >
-        Roll the dice!
-      </button>
     </Fragment>
   );
 };
 
-const mapStateToProps = ({ players, playerTurn }) => ({
+const mapStateToProps = ({ currentPlayer, players, previousPlayer }) => ({
+  currentPlayer,
   players,
-  playerTurn,
+  previousPlayer,
 });
 
 const mapDispatchToProps = dispatch => ({

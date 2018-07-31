@@ -1,4 +1,5 @@
 import math from 'mathjs';
+import invariant from 'invariant';
 import { isEven } from '../common/util';
 
 // TODO: make sure this is correct, also ensure we get absorbing state for last square.
@@ -83,7 +84,7 @@ const initPlayers = numberOfPlayers => {
 
 const random = (max, min) => Math.random() * (max - min) + min;
 
-const getRandomNextPosition = predictionVector => {
+const getRandomNextIndex = predictionVector => {
   const totalWeight = predictionVector.reduce(
     (acc, elem) => acc + elem.probability,
     0
@@ -110,9 +111,9 @@ const getNextPositionVector = nextPosition => {
   return positionVector;
 };
 
-const getNextPosition = nextPosition => {
-  let column = nextPosition % 10;
-  const row = 9 - Math.floor(nextPosition / 10);
+const getNextPosition = nextIndex => {
+  let column = nextIndex % 10;
+  const row = 9 - Math.floor(nextIndex / 10);
 
   if (isEven(row)) {
     column = 9 - column;
@@ -124,10 +125,19 @@ const getNextPosition = nextPosition => {
   };
 };
 
+const getCurrentIndex = positionVector => {
+  for (let index = 0; index < positionVector.length; ++index) {
+    if (positionVector[index] === 1) {
+      return index;
+    }
+  }
+  invariant(false, 'Position vector does not contain a given position!');
+}
+
 // TODO: http://mathjs.org/examples/browser/webworkers/index.html
 const rollDice = state =>
   state.players.map(player => {
-    if (player.number === state.playerTurn) {
+    if (player.number === state.currentPlayer) {
       const movePrediction = math.multiply(
         player.positionVector,
         state.transitionMatrix
@@ -138,12 +148,14 @@ const rollDice = state =>
         .map((x, index) => ({ index, probability: x }))
         .filter(x => x.probability > 0);
 
-      const nextPosition = getRandomNextPosition(predictionVector);
+      const currentIndex = getCurrentIndex(player.positionVector);
+      const nextIndex = getRandomNextIndex(predictionVector);
 
       return {
         ...player,
-        positionVector: getNextPositionVector(nextPosition),
-        position: getNextPosition(nextPosition),
+        positionVector: getNextPositionVector(nextIndex),
+        position: getNextPosition(nextIndex),
+        rolled: nextIndex - currentIndex,
       };
     }
     return player;
@@ -167,14 +179,16 @@ export const gameState = (state = initialState, action) => {
       return {
         ...state,
         players: rollDice(state),
-        playerTurn: ((state.playerTurn + 2) % state.players.length) + 1,
+        previousPlayer: state.currentPlayer,
+        currentPlayer: ((state.currentPlayer + 2) % state.players.length) + 1,
       };
     }
     case SET_NUMBER_OF_PLAYERS: {
       return {
         ...state,
         players: initPlayers(action.numberOfPlayers),
-        playerTurn: 1,
+        previousPlayer: null,
+        currentPlayer: 1,
       };
     }
     default:

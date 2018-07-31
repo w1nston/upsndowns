@@ -24,6 +24,11 @@ const squareStyle = css`
 
 const playersStyle = css`
   font-size: 1rem;
+
+  @media (min-width: 992px) {
+    font-size: .625rem;
+    margin-bottom: 1.125rem;
+  }
 `;
 
 const Square = ({ number, players }) => (

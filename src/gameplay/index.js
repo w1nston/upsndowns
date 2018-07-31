@@ -24,7 +24,7 @@ const initTransitionMatrix = () => {
     predictionMatrix.push(predictionVector);
   }
 
-  for (let row = 94; row < 100; ++row) {
+  for (let row = 94; row < 99; ++row) {
     const predictionVector = [];
 
     for (let i = 0; i < 94; ++i) {
@@ -37,6 +37,14 @@ const initTransitionMatrix = () => {
 
     predictionMatrix.push(predictionVector);
   }
+
+  const predictionVector = [];
+  for (let column = 0; column < 99; ++column) {
+    predictionVector.push(0);
+  }
+  predictionVector.push(1);
+
+  predictionMatrix.push(predictionVector);
 
   const transitionMatrix = math.matrix(predictionMatrix);
 

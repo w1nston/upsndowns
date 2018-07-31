@@ -78,6 +78,8 @@ const GameobardContainer = ({
     };
   });
 
+  const winner = players.find(player => player.positionVector[99] === 1);
+
   return (
     <Fragment>
       <Gameboard gameboard={gameboard} />
@@ -88,17 +90,26 @@ const GameobardContainer = ({
         </div>
         {previousPlayer && (
           <div className={playersInformationContainerStyle}>
-            <strong className={playersInformationStrongStyle}>Player {previousPlayer} rolled:</strong>
+            <strong className={playersInformationStrongStyle}>
+              Player {previousPlayer} rolled:
+            </strong>
             <span>{players[previousPlayer - 1].rolled}</span>
           </div>
         )}
-        <button
-          type="button"
-          onClick={handleRollDice}
-          className={diceButtonStyle}
-        >
-          Roll the dice!
-        </button>
+        {winner !== undefined ? (
+          <div className={playersInformationContainerStyle}>
+            <strong className={playersInformationStrongStyle}>Winner:</strong>
+            <span>Player {winner.number}</span>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleRollDice}
+            className={diceButtonStyle}
+          >
+            Roll the dice!
+          </button>
+        )}
       </div>
     </Fragment>
   );

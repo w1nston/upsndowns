@@ -56,7 +56,7 @@ const GameobardContainer = ({
     return <Redirect noThrow from="/game" to="/" />;
   }
 
-  function handleRollDice(event) {
+  function handleRollDice() {
     dispatchRollDice();
   }
 

@@ -30,14 +30,17 @@ const diceButtonStyle = css`
   @media (min-width: 992px) {
     height: 2.5rem;
     margin: 0;
-    width: 2.5rem;
+    width: 8rem;
   }
 `;
 
 const whosTurnStyle = css`
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 `;
 
+const playersInformationContainerStyle = css`
+  margin: 1rem;
+`;
 
 const GameobardContainer = ({ dispatchRollDice, players, playerTurn }) => {
   if (players.length < 1) {
@@ -69,8 +72,10 @@ const GameobardContainer = ({ dispatchRollDice, players, playerTurn }) => {
   return (
     <Fragment>
       <Gameboard gameboard={gameboard} />
-      <strong className={whosTurnStyle}>Who's turn:</strong>
-      <span>Player {playerTurn}</span>
+      <div className={playersInformationContainerStyle}>
+        <strong className={whosTurnStyle}>Who's turn:</strong>
+        <span>Player {playerTurn}</span>
+      </div>
       <button
         type="button"
         onClick={handleRollDice}

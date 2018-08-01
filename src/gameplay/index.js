@@ -40,10 +40,10 @@ const initTransitionMatrix = () => {
   predictionMatrix.push(vector95);
 
   const vector96 = math.zeros(96).valueOf();
-  vector96.push(1/6);
-  vector96.push(2/6);
-  vector96.push(2/6);
-  vector96.push(1/6);
+  vector96.push(1 / 6);
+  vector96.push(2 / 6);
+  vector96.push(2 / 6);
+  vector96.push(1 / 6);
   predictionMatrix.push(vector96);
 
   predictionMatrix.push(vector96);
@@ -159,19 +159,16 @@ const rollDice = state =>
       const currentIndex = getCurrentIndex(player.positionVector);
       const nextIndex = getRandomNextIndex(predictionVector);
 
-      if (currentIndex > nextIndex) {
-        // TODO: something...
-        console.log(
-          '(99 - currentIndex) + nextIndex',
-          99 - currentIndex + nextIndex
-        );
-      }
+      const rolled =
+        nextIndex - currentIndex <= 0
+          ? 99 - currentIndex + (99 - nextIndex)
+          : nextIndex - currentIndex;
 
       return {
         ...player,
         positionVector: getNextPositionVector(nextIndex),
         position: getNextPosition(nextIndex),
-        rolled: nextIndex - currentIndex,
+        rolled,
       };
     }
     return player;

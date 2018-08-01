@@ -44,6 +44,13 @@ const playersInformationContainerStyle = css`
 const controlContainerStyle = css`
   display: flex;
   flex-direction: column;
+
+  @media (min-width: 992px) {
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    padding: 1.25rem 0;
+  }
 `;
 
 const GameobardContainer = ({
@@ -84,18 +91,26 @@ const GameobardContainer = ({
     <Fragment>
       <Gameboard gameboard={gameboard} />
       <div className={controlContainerStyle}>
-        <div className={playersInformationContainerStyle}>
-          <strong className={playersInformationStrongStyle}>Who's turn:</strong>
-          <span>Player {currentPlayer}</span>
-        </div>
-        {previousPlayer && (
+        <div>
           <div className={playersInformationContainerStyle}>
             <strong className={playersInformationStrongStyle}>
-              Player {previousPlayer} rolled:
+              Who's turn:
             </strong>
-            <span>{players[previousPlayer - 1].rolled}</span>
+            <span>Player {currentPlayer}</span>
           </div>
-        )}
+          {previousPlayer !== null ? (
+            <div className={playersInformationContainerStyle}>
+              <strong className={playersInformationStrongStyle}>
+                Player {previousPlayer} rolled:
+              </strong>
+              <span>{players[previousPlayer - 1].rolled}</span>
+            </div>
+          ) : (
+            <div className={playersInformationContainerStyle}>
+              <strong className={playersInformationStrongStyle}>-</strong>
+            </div>
+          )}
+        </div>
         {winner !== undefined ? (
           <div className={playersInformationContainerStyle}>
             <strong className={playersInformationStrongStyle}>Winner:</strong>

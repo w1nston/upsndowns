@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from '@reach/router';
 import { createBoard } from './gameboardUtil';
 import Gameboard from './Gameboard';
-import { rollDiceAction } from '../gameplay';
+import { getRowAndColumn, ladders, rollDiceAction } from '../gameplay';
 import { isNotEmpty } from '../common/util';
 
 const diceButtonStyle = css`
@@ -84,6 +84,23 @@ const GameobardContainer = ({
         : [player.number],
     };
   });
+
+  ladders
+    .map(ladder => ({ from: ladder.from - 1, to: ladder.to - 1 }))
+    .forEach(ladder => {
+      const from = getRowAndColumn(ladder.from);
+      const to = getRowAndColumn(ladder.to);
+      gameboard[from.row][from.column] = Object.assign(
+        {},
+        gameboard[from.row][from.column],
+        { ladderTo: ladder.to + 1 }
+      );
+      gameboard[to.row][to.column] = Object.assign(
+        {},
+        gameboard[to.row][to.column],
+        { ladderFrom: ladder.from + 1 }
+      );
+    });
 
   const winner = players.find(player => player.positionVector[99] === 1);
 

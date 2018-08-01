@@ -59,26 +59,30 @@ const initTransitionMatrix = () => {
 };
 
 const addJump = (transitionMatrix, from, to) => {
-  for (let i = (from - 1 - 6); i < (from - 1); ++i) {
+  for (let i = from - 1 - 6; i < from - 1; ++i) {
     transitionMatrix[i][from - 1] = 0;
-    transitionMatrix[i][to - 1] = 1/6;
+    transitionMatrix[i][to - 1] = 1 / 6;
   }
-}
+};
+
+export const ladders = [
+  { from: 14, to: 26 },
+  { from: 38, to: 56 },
+  { from: 55, to: 75 },
+  { from: 73, to: 87 },
+];
 
 const addLadders = transitionMatrix => {
-  addJump(transitionMatrix, 14, 26);
-  addJump(transitionMatrix, 38, 56);
-  addJump(transitionMatrix, 55, 75);
-  addJump(transitionMatrix, 73, 87);
+  ladders.forEach(ladder => {
+    addJump(transitionMatrix, ladder.from, ladder.to);
+  });
   return transitionMatrix;
-}
+};
 
 const initialState = {
   players: [],
   playerTurn: null,
-  transitionMatrix: math.matrix(
-    addLadders(initTransitionMatrix())
-  ),
+  transitionMatrix: math.matrix(addLadders(initTransitionMatrix())),
 };
 
 const initPositionVector = () => {
@@ -134,9 +138,9 @@ const getNextPositionVector = nextPosition => {
   return positionVector;
 };
 
-const getNextPosition = nextIndex => {
-  let column = nextIndex % 10;
-  const row = 9 - Math.floor(nextIndex / 10);
+export const getRowAndColumn = index => {
+  let column = index % 10;
+  const row = 9 - Math.floor(index / 10);
 
   if (isEven(row)) {
     column = 9 - column;
@@ -174,7 +178,7 @@ const rollDice = state =>
       const currentIndex = getCurrentIndex(player.positionVector);
       const nextIndex = getRandomNextIndex(predictionVector);
 
-      const rolled =
+      const rolled = // TODO: need to calculate for ladders and snakes...
         nextIndex - currentIndex <= 0
           ? 99 - currentIndex + (99 - nextIndex)
           : nextIndex - currentIndex;
@@ -182,7 +186,7 @@ const rollDice = state =>
       return {
         ...player,
         positionVector: getNextPositionVector(nextIndex),
-        position: getNextPosition(nextIndex),
+        position: getRowAndColumn(nextIndex),
         rolled,
       };
     }

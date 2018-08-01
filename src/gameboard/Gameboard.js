@@ -16,7 +16,12 @@ const Gameboard = ({ gameboard }) => {
           <tr key={uuid()}>
             {row.map(square => (
               <td key={uuid()}>
-                <Square players={square.players} number={square.number} />
+                <Square
+                  players={square.players}
+                  number={square.number}
+                  ladderTo={square.ladderTo}
+                  ladderFrom={square.ladderFrom}
+                />
               </td>
             ))}
           </tr>

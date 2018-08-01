@@ -174,6 +174,13 @@ const rollDice = state =>
     return player;
   });
 
+const calculateNextPlayer = (currentPlayer, players) => {
+  if (players[currentPlayer - 1].rolled === 6) {
+    return currentPlayer;
+  }
+  return ((currentPlayer + 2) % players.length) + 1;
+};
+
 const ROLL_DICE = 'ROLL_DICE';
 const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
 
@@ -189,11 +196,12 @@ export const setNumberOfPlayersAction = numberOfPlayers => ({
 export const gameState = (state = initialState, action) => {
   switch (action.type) {
     case ROLL_DICE: {
+      const players = rollDice(state);
       return {
         ...state,
-        players: rollDice(state),
+        players,
         previousPlayer: state.currentPlayer,
-        currentPlayer: ((state.currentPlayer + 2) % state.players.length) + 1,
+        currentPlayer: calculateNextPlayer(state.currentPlayer, players),
       };
     }
     case SET_NUMBER_OF_PLAYERS: {

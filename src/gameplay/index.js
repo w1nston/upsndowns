@@ -2,11 +2,10 @@ import math from 'mathjs';
 import invariant from 'invariant';
 import { isEven } from '../common/util';
 
-// TODO: make sure this is correct, also ensure we get absorbing state for last square.
 const initTransitionMatrix = () => {
   const predictionMatrix = [];
 
-  for (let row = 0; row < 94; ++row) {
+  for (let row = 0; row < 93; ++row) {
     let startIndex = row + 1;
     const predictionVector = [];
 
@@ -25,27 +24,36 @@ const initTransitionMatrix = () => {
     predictionMatrix.push(predictionVector);
   }
 
-  for (let row = 94; row < 99; ++row) {
-    const predictionVector = [];
-
-    for (let i = 0; i < 94; ++i) {
-      predictionVector.push(0);
-    }
-
-    for (let i = 94; i < 100; ++i) {
-      predictionVector.push(1 / 6);
-    }
-
-    predictionMatrix.push(predictionVector);
+  // Special ending cases
+  const vector94 = math.zeros(94).valueOf();
+  for (let i = 0; i < 6; ++i) {
+    vector94.push(1 / 6);
   }
+  predictionMatrix.push(vector94);
 
-  const predictionVector = [];
-  for (let column = 0; column < 99; ++column) {
-    predictionVector.push(0);
-  }
-  predictionVector.push(1);
+  const vector95 = math.zeros(95).valueOf();
+  vector95.push(1 / 6);
+  vector95.push(1 / 6);
+  vector95.push(1 / 6);
+  vector95.push(2 / 6);
+  vector95.push(1 / 6);
+  predictionMatrix.push(vector95);
 
-  predictionMatrix.push(predictionVector);
+  const vector96 = math.zeros(96).valueOf();
+  vector96.push(1/6);
+  vector96.push(2/6);
+  vector96.push(2/6);
+  vector96.push(1/6);
+  predictionMatrix.push(vector96);
+
+  predictionMatrix.push(vector96);
+  predictionMatrix.push(vector95);
+  predictionMatrix.push(vector94);
+
+  const absorbingState = math.zeros(99).valueOf();
+  absorbingState.push(1);
+
+  predictionMatrix.push(absorbingState);
 
   const transitionMatrix = math.matrix(predictionMatrix);
 
@@ -132,7 +140,7 @@ const getCurrentIndex = positionVector => {
     }
   }
   invariant(false, 'Position vector does not contain a given position!');
-}
+};
 
 // TODO: http://mathjs.org/examples/browser/webworkers/index.html
 const rollDice = state =>
@@ -150,6 +158,14 @@ const rollDice = state =>
 
       const currentIndex = getCurrentIndex(player.positionVector);
       const nextIndex = getRandomNextIndex(predictionVector);
+
+      if (currentIndex > nextIndex) {
+        // TODO: something...
+        console.log(
+          '(99 - currentIndex) + nextIndex',
+          99 - currentIndex + nextIndex
+        );
+      }
 
       return {
         ...player,

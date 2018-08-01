@@ -55,15 +55,30 @@ const initTransitionMatrix = () => {
 
   predictionMatrix.push(absorbingState);
 
-  const transitionMatrix = math.matrix(predictionMatrix);
-
-  return transitionMatrix;
+  return predictionMatrix;
 };
+
+const addLadder = (transitionMatrix, from, to) => {
+  for (let i = (from - 1 - 6); i < (from - 1); ++i) {
+    transitionMatrix[i][from - 1] = 0;
+    transitionMatrix[i][to - 1] = 1/6;
+  }
+}
+
+const addLadders = transitionMatrix => {
+  addLadder(transitionMatrix, 14, 26);
+  addLadder(transitionMatrix, 38, 56);
+  addLadder(transitionMatrix, 55, 75);
+  addLadder(transitionMatrix, 73, 87);
+  return transitionMatrix;
+}
 
 const initialState = {
   players: [],
   playerTurn: null,
-  transitionMatrix: initTransitionMatrix(),
+  transitionMatrix: math.matrix(
+    addLadders(initTransitionMatrix())
+  ),
 };
 
 const initPositionVector = () => {

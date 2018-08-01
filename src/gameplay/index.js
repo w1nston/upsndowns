@@ -72,6 +72,13 @@ export const ladders = [
   { from: 73, to: 87 },
 ];
 
+export const snakes = [
+  { from: 27, to: 5 },
+  { from: 44, to: 17 },
+  { from: 52, to: 48 },
+  { from: 82, to: 62 },
+];
+
 const addLadders = transitionMatrix => {
   ladders.forEach(ladder => {
     addJump(transitionMatrix, ladder.from, ladder.to);
@@ -79,10 +86,17 @@ const addLadders = transitionMatrix => {
   return transitionMatrix;
 };
 
+const addSnakes = transitionMatrix => {
+  snakes.forEach(snake => {
+    addJump(transitionMatrix, snake.from, snake.to);
+  });
+  return transitionMatrix;
+};
+
 const initialState = {
   players: [],
   playerTurn: null,
-  transitionMatrix: math.matrix(addLadders(initTransitionMatrix())),
+  transitionMatrix: math.matrix(addLadders(addSnakes(initTransitionMatrix()))),
 };
 
 const initPositionVector = () => {

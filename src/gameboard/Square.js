@@ -2,7 +2,7 @@ import React from 'react';
 import { css } from 'emotion';
 import { isNotEmpty } from '../common/util';
 
-const squareStyle = (ladderTo, ladderFrom) => {
+const squareStyle = (ladderTo, ladderFrom, snakeTo, snakeFrom) => {
   let backgroundColor = '#ddd';
   let color = '#333';
 
@@ -13,6 +13,14 @@ const squareStyle = (ladderTo, ladderFrom) => {
   if (ladderFrom !== undefined) {
     backgroundColor = '#0074d9';
     color = '#fff';
+  }
+
+  if (snakeTo !== undefined) {
+    backgroundColor = '#ff4136';
+  }
+
+  if (snakeFrom !== undefined) {
+    backgroundColor = '#ffdc00';
   }
 
   return css`
@@ -44,11 +52,7 @@ const noMarginParagraphStyle = css`
   }
 `;
 
-const ladderToLabelStyle = css`
-  font-size: 0.625rem;
-`;
-
-const ladderFromLabelStyle = css`
+const smallFontStyle = css`
   font-size: 0.625rem;
 `;
 
@@ -61,16 +65,33 @@ const playersStyle = css`
   }
 `;
 
-const Square = ({ ladderTo, ladderFrom, number, players }) => (
-  <div className={squareStyle(ladderTo, ladderFrom)}>
+const Square = ({
+  ladderTo,
+  ladderFrom,
+  number,
+  players,
+  snakeTo,
+  snakeFrom,
+}) => (
+  <div className={squareStyle(ladderTo, ladderFrom, snakeTo, snakeFrom)}>
     {ladderTo && (
-      <p className={`${ladderToLabelStyle} ${noMarginParagraphStyle}`}>
+      <p className={`${smallFontStyle} ${noMarginParagraphStyle}`}>
         To: {ladderTo}
       </p>
     )}
     {ladderFrom && (
-      <p className={`${ladderFromLabelStyle} ${noMarginParagraphStyle}`}>
+      <p className={`${smallFontStyle} ${noMarginParagraphStyle}`}>
         From: {ladderFrom}
+      </p>
+    )}
+    {snakeTo && (
+      <p className={`${smallFontStyle} ${noMarginParagraphStyle}`}>
+        To: {snakeTo}
+      </p>
+    )}
+    {snakeFrom && (
+      <p className={`${smallFontStyle} ${noMarginParagraphStyle}`}>
+        From: {snakeFrom}
       </p>
     )}
     <p className={noMarginParagraphStyle}>{number}</p>

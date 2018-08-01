@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from '@reach/router';
 import { createBoard } from './gameboardUtil';
 import Gameboard from './Gameboard';
-import { getRowAndColumn, ladders, rollDiceAction } from '../gameplay';
+import { getRowAndColumn, ladders, rollDiceAction, snakes } from '../gameplay';
 import { isNotEmpty } from '../common/util';
 
 const diceButtonStyle = css`
@@ -99,6 +99,23 @@ const GameobardContainer = ({
         {},
         gameboard[to.row][to.column],
         { ladderFrom: ladder.from + 1 }
+      );
+    });
+
+  snakes
+    .map(snake => ({ from: snake.from - 1, to: snake.to - 1 }))
+    .forEach(snake => {
+      const from = getRowAndColumn(snake.from);
+      const to = getRowAndColumn(snake.to);
+      gameboard[from.row][from.column] = Object.assign(
+        {},
+        gameboard[from.row][from.column],
+        { snakeTo: snake.to + 1 }
+      );
+      gameboard[to.row][to.column] = Object.assign(
+        {},
+        gameboard[to.row][to.column],
+        { snakeFrom: snake.from + 1 }
       );
     });
 

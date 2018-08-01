@@ -21,6 +21,8 @@ const Gameboard = ({ gameboard }) => {
                   number={square.number}
                   ladderTo={square.ladderTo}
                   ladderFrom={square.ladderFrom}
+                  snakeTo={square.snakeTo}
+                  snakeFrom={square.snakeFrom}
                 />
               </td>
             ))}

@@ -58,7 +58,7 @@ const initTransitionMatrix = () => {
   return predictionMatrix;
 };
 
-const addLadder = (transitionMatrix, from, to) => {
+const addJump = (transitionMatrix, from, to) => {
   for (let i = (from - 1 - 6); i < (from - 1); ++i) {
     transitionMatrix[i][from - 1] = 0;
     transitionMatrix[i][to - 1] = 1/6;
@@ -66,10 +66,10 @@ const addLadder = (transitionMatrix, from, to) => {
 }
 
 const addLadders = transitionMatrix => {
-  addLadder(transitionMatrix, 14, 26);
-  addLadder(transitionMatrix, 38, 56);
-  addLadder(transitionMatrix, 55, 75);
-  addLadder(transitionMatrix, 73, 87);
+  addJump(transitionMatrix, 14, 26);
+  addJump(transitionMatrix, 38, 56);
+  addJump(transitionMatrix, 55, 75);
+  addJump(transitionMatrix, 73, 87);
   return transitionMatrix;
 }
 

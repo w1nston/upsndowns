@@ -225,7 +225,9 @@ const calculateNextPlayer = (currentPlayer, players) => {
   if (players[currentPlayer - 1].rolled === 6) {
     return currentPlayer;
   }
-  return ((currentPlayer + 2) % players.length) + 1;
+
+  const nextPlayer = (currentPlayer + 1) % players.length;
+  return nextPlayer > 0 ? nextPlayer : players.length;
 };
 
 const ROLL_DICE = 'ROLL_DICE';

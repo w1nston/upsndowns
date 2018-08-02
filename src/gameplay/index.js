@@ -175,6 +175,23 @@ const getCurrentIndex = positionVector => {
   invariant(false, 'Position vector does not contain a given position!');
 };
 
+const calculateDiceRoll = (currentIndex, nextIndex) => {
+  if (nextIndex - currentIndex <= 0) {
+    const snake = snakes.find(s => s.to === nextIndex + 1);
+
+    if (snake) {
+      return snake.from - 1 - currentIndex;
+    }
+
+    return 99 - currentIndex + (99 - nextIndex);
+  } else if (nextIndex - currentIndex > 6) {
+    const ladder = ladders.find(l => l.to === nextIndex + 1);
+    return ladder.from - 1 - currentIndex;
+  }
+
+  return nextIndex - currentIndex;
+};
+
 // TODO: http://mathjs.org/examples/browser/webworkers/index.html
 const rollDice = state =>
   state.players.map(player => {
@@ -192,10 +209,7 @@ const rollDice = state =>
       const currentIndex = getCurrentIndex(player.positionVector);
       const nextIndex = getRandomNextIndex(predictionVector);
 
-      const rolled = // TODO: need to calculate for ladders and snakes...
-        nextIndex - currentIndex <= 0
-          ? 99 - currentIndex + (99 - nextIndex)
-          : nextIndex - currentIndex;
+      const rolled = calculateDiceRoll(currentIndex, nextIndex);
 
       return {
         ...player,

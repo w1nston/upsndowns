@@ -1,4 +1,4 @@
-import { addMetaLayerToSquares, createBoard } from '../gameboardUtil';
+import { createBoard } from '../gameboardUtil';
 
 describe('createBoard', () => {
   it('throws error when rows are zero', () => {

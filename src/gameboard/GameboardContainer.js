@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect } from '@reach/router';
 import { createBoard } from './gameboardUtil';
 import Gameboard from './Gameboard';
-import { getRowAndColumn, ladders, rollDiceAction, snakes } from '../gameplay';
-import { isNotEmpty } from '../common/util';
+import { ladders, rollDiceAction, snakes } from '../gameplay';
+import { getRowAndColumn, isNotEmpty } from '../common/util';
 
 const diceButtonStyle = css`
   background-color: #0074d9;

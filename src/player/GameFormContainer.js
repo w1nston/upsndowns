@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { Subscribe } from 'unstated';
 import { Redirect } from '@reach/router';
-import {
-  setNumberOfPlayersAction,
-} from '../gameplay';
+import { GameStateContainer } from '../gameplay';
 import GameForm from './GameForm';
 
 class GameFormContainer extends Component {
@@ -40,39 +38,32 @@ class GameFormContainer extends Component {
     }
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    this.props.dispatchNumberOfPlayers(this.state.numberOfPlayers);
-    this.setState({ submitted: true });
-  };
-
   render() {
-    const {
-      message,
-      numberOfPlayers,
-    } = this.state;
+    const { message, numberOfPlayers } = this.state;
     return this.state.submitted ? (
       <Redirect noThrow to="/game" />
     ) : (
-      <GameForm
-        message={message}
-        onPlayersChange={this.handlePlayersChange}
-        onPlayersDecrease={this.handlePlayersDecrease}
-        onPlayersIncrease={this.handlePlayersIncrease}
-        onSubmit={this.handleSubmit}
-        numberOfPlayers={numberOfPlayers}
-      />
+      <Subscribe to={[GameStateContainer]}>
+        {gameState => {
+          const handleSubmit = event => {
+            event.preventDefault();
+            gameState.setNumberOfPlayers(this.state.numberOfPlayers);
+            this.setState({ submitted: true });
+          }
+          return (
+            <GameForm
+              message={message}
+              onPlayersChange={this.handlePlayersChange}
+              onPlayersDecrease={this.handlePlayersDecrease}
+              onPlayersIncrease={this.handlePlayersIncrease}
+              onSubmit={handleSubmit}
+              numberOfPlayers={numberOfPlayers}
+            />
+          );
+        }}
+      </Subscribe>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  dispatchNumberOfPlayers: numberOfPlayers => {
-    dispatch(setNumberOfPlayersAction(numberOfPlayers));
-  },
-});
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(GameFormContainer);
+export default GameFormContainer;

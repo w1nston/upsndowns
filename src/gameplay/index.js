@@ -1,12 +1,8 @@
+import { Container } from 'unstated';
 import math from 'mathjs';
 import invariant from 'invariant';
 import { getRowAndColumn } from '../common/util';
-import {
-  addJump,
-  initPlayers,
-  initTransitionMatrix,
-  random,
-} from './util';
+import { addJump, initPlayers, initTransitionMatrix, random } from './util';
 
 export const ladders = [
   { from: 14, to: 26 },
@@ -34,12 +30,6 @@ const addSnakes = transitionMatrix => {
     addJump(transitionMatrix, snake.from, snake.to);
   });
   return transitionMatrix;
-};
-
-const initialState = {
-  players: [],
-  playerTurn: null,
-  transitionMatrix: math.matrix(addLadders(addSnakes(initTransitionMatrix()))),
 };
 
 const getRandomNextIndex = predictionVector => {
@@ -95,35 +85,6 @@ const calculateDiceRoll = (currentIndex, nextIndex) => {
   return nextIndex - currentIndex;
 };
 
-// TODO: http://mathjs.org/examples/browser/webworkers/index.html
-const rollDice = state =>
-  state.players.map(player => {
-    if (player.number === state.currentPlayer) {
-      const movePrediction = math.multiply(
-        player.positionVector,
-        state.transitionMatrix
-      );
-
-      const predictionVector = movePrediction
-        .valueOf()
-        .map((probability, index) => ({ index, probability }))
-        .filter(x => x.probability > 0);
-
-      const currentIndex = getCurrentIndex(player.positionVector);
-      const nextIndex = getRandomNextIndex(predictionVector);
-
-      const rolled = calculateDiceRoll(currentIndex, nextIndex);
-
-      return {
-        ...player,
-        positionVector: getNextPositionVector(nextIndex),
-        position: getRowAndColumn(nextIndex),
-        rolled,
-      };
-    }
-    return player;
-  });
-
 const calculateNextPlayer = (currentPlayer, players) => {
   if (players[currentPlayer - 1].rolled === 6) {
     return currentPlayer;
@@ -133,38 +94,57 @@ const calculateNextPlayer = (currentPlayer, players) => {
   return nextPlayer > 0 ? nextPlayer : players.length;
 };
 
-const ROLL_DICE = 'ROLL_DICE';
-const SET_NUMBER_OF_PLAYERS = 'SET_NUMBER_OF_PLAYERS';
+// TODO: http://mathjs.org/examples/browser/webworkers/index.html
+const rollForCurrentPlayer = (player, state) => {
+  if (player.number === state.currentPlayer) {
+    const movePrediction = math.multiply(
+      player.positionVector,
+      state.transitionMatrix
+    );
 
-export const rollDiceAction = () => ({
-  type: ROLL_DICE,
-});
+    const predictionVector = movePrediction
+      .valueOf()
+      .map((probability, index) => ({ index, probability }))
+      .filter(x => x.probability > 0);
 
-export const setNumberOfPlayersAction = numberOfPlayers => ({
-  type: SET_NUMBER_OF_PLAYERS,
-  numberOfPlayers,
-});
+    const currentIndex = getCurrentIndex(player.positionVector);
+    const nextIndex = getRandomNextIndex(predictionVector);
 
-export const gameState = (state = initialState, action) => {
-  switch (action.type) {
-    case ROLL_DICE: {
-      const players = rollDice(state);
-      return {
-        ...state,
-        players,
-        previousPlayer: state.currentPlayer,
-        currentPlayer: calculateNextPlayer(state.currentPlayer, players),
-      };
-    }
-    case SET_NUMBER_OF_PLAYERS: {
-      return {
-        ...state,
-        players: initPlayers(action.numberOfPlayers),
-        previousPlayer: null,
-        currentPlayer: 1,
-      };
-    }
-    default:
-      return state;
+    const rolled = calculateDiceRoll(currentIndex, nextIndex);
+
+    return {
+      ...player,
+      positionVector: getNextPositionVector(nextIndex),
+      position: getRowAndColumn(nextIndex),
+      rolled,
+    };
+  } else {
+    return player;
   }
 };
+
+export class GameStateContainer extends Container {
+  state = {
+    players: [],
+    transitionMatrix: math.matrix(
+      addLadders(addSnakes(initTransitionMatrix()))
+    ),
+    previousPlayer: null,
+    currentPlayer: null,
+  };
+
+  rollDice = () => {
+    const players = this.state.players.map(player => rollForCurrentPlayer(player, this.state));
+
+    this.setState(state => ({
+      players, 
+      previousPlayer: state.currentPlayer,
+      currentPlayer: calculateNextPlayer(state.currentPlayer, players),
+    }));
+  }
+
+  setNumberOfPlayers = numberOfPlayers => {
+    const players = initPlayers(numberOfPlayers);
+    this.setState({ players, currentPlayer: 1 });
+  }
+}

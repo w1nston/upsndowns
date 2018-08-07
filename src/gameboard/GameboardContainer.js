@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { css } from 'emotion';
-import { connect } from 'react-redux';
 import { Redirect } from '@reach/router';
+import { Subscribe } from 'unstated';
 import { createBoard } from './gameboardUtil';
 import Gameboard from './Gameboard';
-import { ladders, rollDiceAction, snakes } from '../gameplay';
+import { ladders, snakes, GameStateContainer } from '../gameplay';
 import { getRowAndColumn, isNotEmpty } from '../common/util';
 
 const diceButtonStyle = css`
@@ -53,128 +53,127 @@ const controlContainerStyle = css`
   }
 `;
 
-const GameobardContainer = ({
-  currentPlayer,
-  dispatchRollDice,
-  players,
-  previousPlayer,
-}) => {
-  if (players.length < 1) {
-    return <Redirect noThrow from="/game" to="/" />;
-  }
-
-  function handleRollDice() {
-    dispatchRollDice();
-  }
-
+const initGameboard = () => {
   const board = createBoard(10, 10);
 
-  const gameboard = board.map((rowElement, rowIndex) =>
+  return board.map((rowElement, rowIndex) =>
     rowElement.map((columnElement, columnIndex) => ({
       number: board[rowIndex][columnIndex],
     }))
   );
-
-  players.forEach(player => {
-    const square = gameboard[player.position.row][player.position.column];
-    gameboard[player.position.row][player.position.column] = {
-      ...square,
-      players: isNotEmpty(square.players)
-        ? square.players.concat([player.number])
-        : [player.number],
-    };
-  });
-
-  ladders
-    .map(ladder => ({ from: ladder.from - 1, to: ladder.to - 1 }))
-    .forEach(ladder => {
-      const from = getRowAndColumn(ladder.from);
-      const to = getRowAndColumn(ladder.to);
-      gameboard[from.row][from.column] = Object.assign(
-        {},
-        gameboard[from.row][from.column],
-        { ladderTo: ladder.to + 1 }
-      );
-      gameboard[to.row][to.column] = Object.assign(
-        {},
-        gameboard[to.row][to.column],
-        { ladderFrom: ladder.from + 1 }
-      );
-    });
-
-  snakes
-    .map(snake => ({ from: snake.from - 1, to: snake.to - 1 }))
-    .forEach(snake => {
-      const from = getRowAndColumn(snake.from);
-      const to = getRowAndColumn(snake.to);
-      gameboard[from.row][from.column] = Object.assign(
-        {},
-        gameboard[from.row][from.column],
-        { snakeTo: snake.to + 1 }
-      );
-      gameboard[to.row][to.column] = Object.assign(
-        {},
-        gameboard[to.row][to.column],
-        { snakeFrom: snake.from + 1 }
-      );
-    });
-
-  const winner = players.find(player => player.positionVector[99] === 1);
-
-  return (
-    <Fragment>
-      <Gameboard gameboard={gameboard} />
-      <div className={controlContainerStyle}>
-        <div>
-          <div className={playersInformationContainerStyle}>
-            <strong className={playersInformationStrongStyle}>
-              Who's turn:
-            </strong>
-            <span>Player {currentPlayer}</span>
-          </div>
-          {previousPlayer !== null ? (
-            <div className={playersInformationContainerStyle}>
-              <strong className={playersInformationStrongStyle}>
-                Player {previousPlayer} rolled:
-              </strong>
-              <span>{players[previousPlayer - 1].rolled}</span>
-            </div>
-          ) : (
-            <div className={playersInformationContainerStyle}>
-              <strong className={playersInformationStrongStyle}>-</strong>
-            </div>
-          )}
-        </div>
-        {winner !== undefined ? (
-          <div className={playersInformationContainerStyle}>
-            <strong className={playersInformationStrongStyle}>Winner:</strong>
-            <span>Player {winner.number}</span>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={handleRollDice}
-            className={diceButtonStyle}
-          >
-            Roll the dice!
-          </button>
-        )}
-      </div>
-    </Fragment>
-  );
 };
 
-const mapStateToProps = ({ currentPlayer, players, previousPlayer }) => ({
-  currentPlayer,
-  players,
-  previousPlayer,
-});
+class GameboardContainer extends Component {
+  render() {
+    return (
+      <Subscribe to={[GameStateContainer]}>
+        {gameState => {
+          if (gameState.state.players.length < 1) {
+            return <Redirect noThrow from="/game" to="/" />;
+          }
 
-const mapDispatchToProps = dispatch => ({
-  dispatchRollDice: playerNumber => dispatch(rollDiceAction(playerNumber)),
-});
+          const gameboard = initGameboard();
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GameobardContainer);
+          const { currentPlayer, players, previousPlayer } = gameState.state;
+
+          players.forEach(player => {
+            const square =
+              gameboard[player.position.row][player.position.column];
+            gameboard[player.position.row][player.position.column] = {
+              ...square,
+              players: isNotEmpty(square.players)
+                ? square.players.concat([player.number])
+                : [player.number],
+            };
+          });
+
+          ladders
+            .map(ladder => ({ from: ladder.from - 1, to: ladder.to - 1 }))
+            .forEach(ladder => {
+              const from = getRowAndColumn(ladder.from);
+              const to = getRowAndColumn(ladder.to);
+              gameboard[from.row][from.column] = Object.assign(
+                {},
+                gameboard[from.row][from.column],
+                { ladderTo: ladder.to + 1 }
+              );
+              gameboard[to.row][to.column] = Object.assign(
+                {},
+                gameboard[to.row][to.column],
+                { ladderFrom: ladder.from + 1 }
+              );
+            });
+
+          snakes
+            .map(snake => ({ from: snake.from - 1, to: snake.to - 1 }))
+            .forEach(snake => {
+              const from = getRowAndColumn(snake.from);
+              const to = getRowAndColumn(snake.to);
+              gameboard[from.row][from.column] = Object.assign(
+                {},
+                gameboard[from.row][from.column],
+                { snakeTo: snake.to + 1 }
+              );
+              gameboard[to.row][to.column] = Object.assign(
+                {},
+                gameboard[to.row][to.column],
+                { snakeFrom: snake.from + 1 }
+              );
+            });
+
+          const winner = players.find(
+            player => player.positionVector[99] === 1
+          );
+
+          return (
+            <Fragment>
+              <Gameboard gameboard={gameboard} />
+              <div className={controlContainerStyle}>
+                <div>
+                  <div className={playersInformationContainerStyle}>
+                    <strong className={playersInformationStrongStyle}>
+                      Who's turn:
+                    </strong>
+                    <span>Player {currentPlayer}</span>
+                  </div>
+                  {previousPlayer !== null ? (
+                    <div className={playersInformationContainerStyle}>
+                      <strong className={playersInformationStrongStyle}>
+                        Player {previousPlayer} rolled:
+                      </strong>
+                      <span>{players[previousPlayer - 1].rolled}</span>
+                    </div>
+                  ) : (
+                    <div className={playersInformationContainerStyle}>
+                      <strong className={playersInformationStrongStyle}>
+                        -
+                      </strong>
+                    </div>
+                  )}
+                </div>
+                {winner !== undefined ? (
+                  <div className={playersInformationContainerStyle}>
+                    <strong className={playersInformationStrongStyle}>
+                      Winner:
+                    </strong>
+                    <span>Player {winner.number}</span>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={gameState.rollDice}
+                    className={diceButtonStyle}
+                  >
+                    Roll the dice!
+                  </button>
+                )}
+              </div>
+            </Fragment>
+          );
+        }}
+      </Subscribe>
+    );
+  }
+}
+
+export default GameboardContainer;

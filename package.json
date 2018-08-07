@@ -9,8 +9,7 @@
     "mathjs": "^5.0.4",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0",
+    "unstated": "^2.1.1",
     "uuidv4": "^1.0.1"
   },
   "devDependencies": {

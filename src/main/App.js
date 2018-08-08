@@ -1,8 +1,8 @@
 import React from 'react';
 import { css } from 'emotion';
 import { Router } from '@reach/router';
-import GameFormContainer from '../player/GameFormContainer';
-import GameboardContainer from '../gameboard/GameboardContainer';
+import GameFormContainer from '../player';
+import GameboardContainer from '../gameboard';
 
 const containerStyle = css`
   @media (min-width: 992px) {

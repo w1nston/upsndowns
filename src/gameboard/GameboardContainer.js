@@ -39,7 +39,7 @@ const playersInformationStrongStyle = css`
 `;
 
 const playersInformationContainerStyle = css`
-  margin: .8rem;
+  margin: 0.8rem;
 `;
 
 const controlContainerStyle = css`
@@ -53,6 +53,8 @@ const controlContainerStyle = css`
     padding: 1rem 0;
   }
 `;
+
+const getPlayerSquare = player => player.positionVector.indexOf(1) + 1;
 
 const GameobardContainer = ({
   currentPlayer,
@@ -135,6 +137,12 @@ const GameobardContainer = ({
               Player {previousPlayer} rolled:
             </strong>
             <span>{players[previousPlayer - 1].rolled}</span>
+            <div>
+              <strong className={playersInformationStrongStyle}>
+                Is at square:
+              </strong>
+              <span>{getPlayerSquare(players[previousPlayer - 1])}</span>
+            </div>
           </div>
         ) : (
           <div className={playersInformationContainerStyle}>

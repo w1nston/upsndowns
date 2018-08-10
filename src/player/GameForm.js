@@ -4,13 +4,14 @@ import CounterInput from './CounterInput';
 
 const submitButtonStyle = css`
   background-color: #2ecc71;
-  border-radius: 0.125rem;
+  border-radius: .1rem;
   border-width: 0;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.6);
   color: #ecf0f1;
   display: block;
-  height: 4.75rem;
-  margin: 1.875rem auto;
+  font-size: 1.7rem;
+  height: 3.8rem;
+  margin: 1.5rem auto;
   overflow: hidden;
   outline: none;
   padding: 0;
@@ -23,9 +24,10 @@ const submitButtonStyle = css`
   }
 
   @media (min-width: 992px) {
-    height: 2.5rem;
-    margin: 1rem 0;
-    width: 11rem;
+    font-size: 1rem;
+    height: 2rem;
+    margin: .8rem 0;
+    width: 8.8rem;
   }
 `;
 

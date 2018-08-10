@@ -7,35 +7,36 @@ const inputContainerStyle = css`
 `;
 
 const counterInputInputStyle = css`
-  border-radius: 0.25rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.6);
-  height: 4.75rem;
+  border-radius: 0.2rem;
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.6);
+  height: 3.8rem;
   width: 50%;
-  margin: 0.5rem;
-  font-size: 2rem;
+  margin: .4rem;
+  font-size: 1.6rem;
   text-align: center;
 
   @media (min-width: 992px) {
-    font-size: 1rem;
-    height: 2.5rem;
-    width: 5rem;
+    font-size: .8rem;
+    height: 2rem;
+    width: 4rem;
   }
 `;
 
 const buttonStyle = css`
   background-color: #0074d9;
-  border-radius: 0.125rem;
+  border-radius: 0.1rem;
   border-width: 0;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.6);
   color: #ecf0f1;
   display: block;
-  height: 4.75rem;
-  margin: 1.875rem auto;
+  font-size: 1.7rem;
+  height: 3.8rem;
+  margin: 1.5rem auto;
   overflow: hidden;
   outline: none;
   padding: 0;
   transition: background-color 0.3s;
-  width: 4.75rem;
+  width: 3.8rem;
 
   &:hover,
   :focus {
@@ -43,9 +44,10 @@ const buttonStyle = css`
   }
 
   @media (min-width: 992px) {
-    height: 2.5rem;
+    font-size: 1rem;
+    height: 2rem;
     margin: 0;
-    width: 2.5rem;
+    width: 2rem;
   }
 `;
 

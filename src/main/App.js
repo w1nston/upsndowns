@@ -5,18 +5,17 @@ import GameFormContainer from '../player';
 import GameboardContainer from '../gameboard';
 
 const containerStyle = css`
+  padding: 0 .6rem;
+
   @media (min-width: 992px) {
     margin: 0 auto;
-    width: 41.875rem;
+    width: 33.5rem;
   }
 `;
 
 const titleStyle = css`
-  font-size: 2rem;
-  margin: 4.375rem 1rem;
-
   @media (min-width: 992px) {
-    margin: 4.375rem 0;
+    margin: 3.5rem 0;
   }
 `;
 

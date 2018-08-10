@@ -9,12 +9,13 @@ import { getRowAndColumn, isNotEmpty } from '../common/util';
 
 const diceButtonStyle = css`
   background-color: #0074d9;
-  border-radius: 0.125rem;
+  border-radius: 0.1rem;
   border-width: 0;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.6);
   color: #ecf0f1;
   display: block;
-  height: 4.75rem;
+  font-size: 1rem;
+  height: 3.8rem;
   overflow: hidden;
   outline: none;
   padding: 0;
@@ -27,18 +28,18 @@ const diceButtonStyle = css`
   }
 
   @media (min-width: 992px) {
-    height: 2.5rem;
+    height: 2rem;
     margin: 0;
-    width: 8rem;
+    width: 6.4rem;
   }
 `;
 
 const playersInformationStrongStyle = css`
-  margin-right: 0.5rem;
+  margin-right: 0.4rem;
 `;
 
 const playersInformationContainerStyle = css`
-  margin: 1rem;
+  margin: .8rem;
 `;
 
 const controlContainerStyle = css`
@@ -49,7 +50,7 @@ const controlContainerStyle = css`
     align-items: center;
     flex-direction: row-reverse;
     justify-content: flex-end;
-    padding: 1.25rem 0;
+    padding: 1rem 0;
   }
 `;
 
@@ -123,28 +124,26 @@ const GameobardContainer = ({
 
   return (
     <Fragment>
-      <Gameboard gameboard={gameboard} />
-      <div className={controlContainerStyle}>
-        <div>
+      <div>
+        <div className={playersInformationContainerStyle}>
+          <strong className={playersInformationStrongStyle}>Who's turn:</strong>
+          <span>Player {currentPlayer}</span>
+        </div>
+        {previousPlayer !== null ? (
           <div className={playersInformationContainerStyle}>
             <strong className={playersInformationStrongStyle}>
-              Who's turn:
+              Player {previousPlayer} rolled:
             </strong>
-            <span>Player {currentPlayer}</span>
+            <span>{players[previousPlayer - 1].rolled}</span>
           </div>
-          {previousPlayer !== null ? (
-            <div className={playersInformationContainerStyle}>
-              <strong className={playersInformationStrongStyle}>
-                Player {previousPlayer} rolled:
-              </strong>
-              <span>{players[previousPlayer - 1].rolled}</span>
-            </div>
-          ) : (
-            <div className={playersInformationContainerStyle}>
-              <strong className={playersInformationStrongStyle}>-</strong>
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className={playersInformationContainerStyle}>
+            <strong className={playersInformationStrongStyle}>-</strong>
+          </div>
+        )}
+      </div>
+      <Gameboard gameboard={gameboard} />
+      <div className={controlContainerStyle}>
         {winner !== undefined ? (
           <div className={playersInformationContainerStyle}>
             <strong className={playersInformationStrongStyle}>Winner:</strong>

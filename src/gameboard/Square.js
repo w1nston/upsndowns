@@ -34,10 +34,9 @@ const squareStyle = (ladderTo, ladderFrom, snakeTo, snakeFrom) => {
     height: 2.1rem;
 
     @media (min-width: 992px) {
-      // font-weight: 500;
-      // font-size: 1rem;
-      // height: 3.875rem;
-      // width: 3.875rem;
+      font-weight: 500;
+      font-size: 1rem;
+      height: 3.1rem;
     }
   `;
 };
@@ -49,6 +48,18 @@ const squareRowStyle = css`
 
 const snakeOrLadderStyle = css`
   font-size: 0.3rem;
+
+  @media (min-width: 992px) {
+    font-size: 0.5rem;
+  }
+`;
+
+const playersStyle = css`
+  font-size: 0.3rem;
+
+  @media (min-width: 992px) {
+    font-size: 0.5rem;
+  }
 `;
 
 const Square = ({
@@ -67,7 +78,7 @@ const Square = ({
       {snakeFrom && `From: ${snakeFrom}`}
     </div>
     <div className={squareRowStyle}>{number}</div>
-    <div className={squareRowStyle}>
+    <div className={`${squareRowStyle} ${playersStyle}`}>
       {isNotEmpty(players) ? (
         <Fragment>
           <span>{players.join(', ')}</span>

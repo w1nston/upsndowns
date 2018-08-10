@@ -5,6 +5,7 @@ import Square from './Square';
 
 const tableStyle = css`
   border-collapse: collapse;
+  margin-bottom: 0.5rem;
   width: 100%;
 `;
 

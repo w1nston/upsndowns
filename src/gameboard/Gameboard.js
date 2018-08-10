@@ -5,6 +5,11 @@ import Square from './Square';
 
 const tableStyle = css`
   border-collapse: collapse;
+  width: 100%;
+`;
+
+const tableCellStyle = css`
+  width: 10%;
 `;
 
 const Gameboard = ({ gameboard }) => {
@@ -15,7 +20,7 @@ const Gameboard = ({ gameboard }) => {
         {gameboard.map(row => (
           <tr key={uuid()}>
             {row.map(square => (
-              <td key={uuid()}>
+              <td className={tableCellStyle} key={uuid()}>
                 <Square
                   players={square.players}
                   number={square.number}

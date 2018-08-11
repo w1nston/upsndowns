@@ -119,6 +119,7 @@ const rollDice = state =>
         positionVector: getNextPositionVector(nextIndex),
         position: getRowAndColumn(nextIndex),
         rolled,
+        numberOfDiceRolls: player.numberOfDiceRolls + 1,
       };
     }
     return player;

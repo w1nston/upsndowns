@@ -23,6 +23,7 @@ export const initPlayers = numberOfPlayers => {
   for (let i = 0; i < numberOfPlayers; ++i) {
     players.push({
       number: i + 1,
+      numberOfDiceRolls: 0,
       positionVector: initPositionVector(),
       position: {
         column: 0,

@@ -34,12 +34,22 @@ const diceButtonStyle = css`
   }
 `;
 
-const playersInformationStrongStyle = css`
+const playersInformationStyle = css`
+  margin-top: 1rem;
+`;
+
+const playersInformationDetailsStyle = css`
+  margin-bottom: .5rem;
+`;
+
+const playersInformationEventStyle = css`
   margin-right: 0.4rem;
 `;
 
 const playersInformationContainerStyle = css`
-  margin: 0.8rem;
+  &:last-child {
+    margin-bottom: 20px;
+  }
 `;
 
 const controlContainerStyle = css`
@@ -128,35 +138,44 @@ const GameobardContainer = ({
     <Fragment>
       <div>
         <div className={playersInformationContainerStyle}>
-          <strong className={playersInformationStrongStyle}>Who's turn:</strong>
+          <strong className={playersInformationEventStyle}>Who's turn:</strong>
           <span>Player {currentPlayer}</span>
         </div>
         {previousPlayer !== null ? (
-          <div className={playersInformationContainerStyle}>
-            <strong className={playersInformationStrongStyle}>
-              Player {previousPlayer} rolled:
-            </strong>
-            <span>{players[previousPlayer - 1].rolled}</span>
-            <div>
-              <strong className={playersInformationStrongStyle}>
-                Is at square:
-              </strong>
+          <div className={playersInformationStyle}>
+            <div className={`${playersInformationContainerStyle} ${playersInformationDetailsStyle}`}>
+              <strong>Player {previousPlayer}</strong>
+            </div>
+            <div className={playersInformationContainerStyle}>
+              <span className={playersInformationEventStyle}>rolled:</span>
+              <span>{players[previousPlayer - 1].rolled}</span>
+            </div>
+            <div className={playersInformationContainerStyle}>
+              <span className={playersInformationEventStyle}>is at square:</span>
               <span>{getPlayerSquare(players[previousPlayer - 1])}</span>
             </div>
           </div>
         ) : (
           <div className={playersInformationContainerStyle}>
-            <strong className={playersInformationStrongStyle}>-</strong>
+            <strong className={playersInformationEventStyle}>-</strong>
           </div>
         )}
       </div>
       <Gameboard gameboard={gameboard} />
       <div className={controlContainerStyle}>
         {winner !== undefined ? (
-          <div className={playersInformationContainerStyle}>
-            <strong className={playersInformationStrongStyle}>Winner:</strong>
-            <span>Player {winner.number}</span>
-          </div>
+          <Fragment>
+            <div className={playersInformationContainerStyle}>
+              <strong className={playersInformationEventStyle}>Winner:</strong>
+              <span>Player {winner.number}</span>
+            </div>
+            <div className={playersInformationContainerStyle}>
+              <strong className={playersInformationEventStyle}>
+                Number of dice rolls:
+              </strong>
+              <span>{winner.numberOfDiceRolls}</span>
+            </div>
+          </Fragment>
         ) : (
           <button
             type="button"
